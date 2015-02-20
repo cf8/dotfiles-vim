@@ -1,0 +1,263 @@
+" bundles
+"
+
+if has('vim_starting')
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+call neobundle#begin(expand('~/.vim/bundle/'))
+  NeoBundleFetch 'Shougo/neobundle.vim'
+call neobundle#end()
+
+NeoBundle 'Shougo/neocomplcache'
+
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'bling/vim-airline'
+
+NeoBundle 'tsaleh/vim-supertab'
+
+NeoBundle 'mattn/emmet-vim'
+
+NeoBundle 'kien/ctrlp.vim'
+
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'cwoac/nvim'
+NeoBundle 'tpope/vim-vinegar'
+
+NeoBundle "https://github.com/w0ng/vim-hybrid"
+NeoBundle 'lukaszb/vim-web-indent'
+
+NeoBundleCheck
+
+" some general settings
+
+let mapleader = ","
+
+set nocompatible
+set autowrite
+set nu
+set numberwidth=3
+set hidden
+set ls=2
+
+" long command history
+set hi=2000
+
+" search and case
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+
+" turn the bell off
+set novisualbell
+set t_vb=
+
+" mouse settings
+set mouse=a
+
+" turn off backup, swapfile, set undodir
+set nobackup
+set noswapfile
+set undofile
+set undodir=~/.vim/undo
+
+" fix backspace behavior
+set backspace=indent,eol,start whichwrap+=<,>,[,]
+
+" indent and tab are so smart
+set autoindent
+set smartindent
+set smarttab
+set fo+=cr
+
+" wrap and break the lines
+set wrap
+set linebreak
+
+" scroll jump
+set scrolljump=8
+set scrolloff=8
+
+" syntax
+syntax on
+filetype plugin indent on
+
+" tab settings
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set smarttab
+set expandtab
+
+set lazyredraw
+set autowrite
+set autoread
+
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800
+
+" Better Completion
+set complete=.,w,b,u,t
+set completeopt=longest,menuone,preview
+
+set wildmenu
+set wildmode=list:longest
+
+" Only show cursorline in the current window and in normal mode.
+augroup cline
+  au!
+  au WinLeave,InsertEnter * set nocursorline
+  au WinEnter,InsertLeave * set cursorline
+augroup END
+
+" Make sure Vim returns to the same line when you reopen a file.
+" Thanks, Amit
+augroup line_return
+    au!
+    au BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+augroup END
+
+" Easy buffer navigation
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+augroup ft_stdin
+    au!
+
+    " Treat buffers from stdin (e.g.: echo foo | vim -) as scratch.
+    au StdinReadPost * :set buftype=nofile
+augroup END
+
+" colors and font
+set background=dark
+let g:hybrid_use_Xresources = 1
+colorscheme hybrid
+" colorscheme Tomorrow-Night
+if has('gui_running')
+    set guioptions-=T
+    set guioptions+=g
+    set guioptions-=t
+    set guioptions-=m
+    set guioptions-=L
+    set guioptions-=l
+    set guioptions-=r
+    set guioptions-=R
+    set showtabline=0
+    set guifont=Terminus\ 8
+    nmap <C-S> :w!<cr>
+endif
+
+" show tabs as symbols
+set listchars=tab:»\ ,trail:·
+set list 
+highlight SpecialKey guibg=#262626 ctermbg=none
+
+" --- Hotkeys --- "
+
+" visual shifting without exiting visual mode!
+vnoremap < <gv
+vnoremap > >gv
+
+" Emmet
+let g:user_emmet_mode='a'
+let g:user_emmet_expandabbr_key='<c-e>'
+
+" make <c-l> clear the highlight as well as redraw
+nnoremap <C-L> :nohls<CR><C-L>
+inoremap <C-L> <C-O>:nohls<CR>
+
+" auto format {} on {<CR>
+inoremap {<CR> {<CR>}<C-O>O
+
+" usefull
+nnoremap ; :
+
+nmap <F1> <nop>
+imap <F1> <nop>
+
+" get rid of timeouts
+set notimeout
+set ttimeout
+set timeoutlen=100
+set ttimeoutlen=100
+
+" set cm=blowfish
+
+" python settings
+au BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 smarttab expandtab
+au BufNewFile,BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+au BufNewFile,BufRead *.py set nocindent
+
+" work machine specific settings
+let hostname = substitute(system('hostname'), '\n', '', '')
+if hostname == 'w'
+    au BufRead,BufNewFile *.tp setfiletype php
+    au BufRead,BufNewFile *.tpt setfiletype html
+    au BufRead,BufNewFile *style.tpt set ft=css
+endif
+
+nmap <C-V> "+gP
+imap <C-V> <ESC><C-V>i
+vmap <C-C> "+y
+
+" ctrlp settings
+nmap <leader>t :CtrlPMixed<cr>
+nmap <leader>b :CtrlPBuffer<cr>
+nmap <leader>m :CtrlPMRU<cr>
+nmap <leader>l :CtrlPLine<cr>
+
+let g:ctrlp_custom_ignore = 'node_modules\|git\|hg\|svn'
+let g:ctrlp_map = '<leader>,'
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_max_files = 100000
+let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_lazy_update = 0
+
+nmap ZZ :wqa<CR>
+
+" more natural split behavior
+set splitbelow
+set splitright
+
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+let g:neocomplcache_enable_at_startup = 1
+
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
+
+set noshowmode
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#right_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+
+let g:airline_section_warning=''
+
+let g:airline_theme='hybrid'
+
